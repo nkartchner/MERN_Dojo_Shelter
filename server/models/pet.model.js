@@ -7,11 +7,19 @@ const PetSchema = new mongoose.Schema(
     age: Number,
     breed: String,
     weight: Number,
-    sex: String
+    sex: String,
+    desc: String,
+    adopted: {
+      type: Boolean,
+      default: false
+    },
+    shelterId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Shelter",
+      required: true
+    }
   },
   { timestamps: true }
 );
 
-const Pet = mongoose.model("Pet", PetSchema);
-
-module.exports = Pet;
+module.exports = mongoose.model("Pet", PetSchema);

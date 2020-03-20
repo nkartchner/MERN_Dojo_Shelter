@@ -9,22 +9,21 @@ const Shelter = require("../models/shelter.model");
 // DELETE
 
 module.exports.createShelter = (request, response) => {
-  console.log(request.body);
   Shelter.create(request.body)
-    .then(newShelter => response.json(newShelter))
-    .catch(err => response.json(err));
+    .then(newShelter => response.status(201).json(newShelter))
+    .catch(err => response.status(500).json(err));
 };
 
 module.exports.getAllShelters = (req, res) => {
   Shelter.find()
-    .then(allShelters => res.json(allShelters))
-    .catch(err => res.json(err));
+    .then(allShelters => res.status(200).json(allShelters))
+    .catch(err => res.status(500).json(err));
 };
 
 module.exports.getOneShelter = (req, res) => {
   Shelter.findOne({ name: req.params.name })
-    .then(shelter => res.json(shelter))
-    .catch(err => res.json(err));
+    .then(shelter => res.status(200).json(shelter))
+    .catch(err => res.status(500).json(err));
 };
 
 module.exports.updateShelter = (req, res) => {
@@ -36,9 +35,9 @@ module.exports.updateShelter = (req, res) => {
   Shelter.updateOne({ _id: req.params.id }, req.body)
     .then(confirmation => {
       console.log("Logging the update confirmation", confirmation);
-      return res.json(confirmation);
+      return res.status(200).json(confirmation);
     })
-    .catch(err => res.json(err));
+    .catch(err => res.status(500).json(err));
 };
 
 module.exports.deleteShelter = (req, res) => {
@@ -48,7 +47,13 @@ module.exports.deleteShelter = (req, res) => {
         "Confirming that the shelter was successfully deleted.",
         confirmation
       );
-      return res.json(confirmation);
+      return res.status(200).json(confirmation);
     })
-    .catch(err => res.json(err));
+    .catch(err => res.status(500).json(err));
+};
+
+module.exports.getSheltersPets = (req, res) => {
+  Shelter.findOne({ _id: req.params.shelterId })
+    .then(shelter => res.status(200).json(shelter.pets))
+    .catch(err => res.status(500).json(err));
 };
